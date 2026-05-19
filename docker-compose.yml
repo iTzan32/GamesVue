@@ -1,0 +1,63 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend/Dockerfile
+    container_name: gamesvue-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    environment:
+      NUXT_HOST: 0.0.0.0
+      NUXT_PORT: 3000
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    container_name: gamesvue-api
+    ports:
+      - "8080:80"
+    volumes:
+      - ./api:/var/www/html
+    environment:
+      DB_HOST: db
+      DB_NAME: gamesvue
+      DB_USER: gamesvue_user
+      DB_PASSWORD: gamesvue_password
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.4
+    container_name: gamesvue-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: gamesvue
+      MYSQL_USER: gamesvue_user
+      MYSQL_PASSWORD: gamesvue_password
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database/init:/docker-entrypoint-initdb.d
+
+  phpmyadmin:
+    image: phpmyadmin:5
+    container_name: gamesvue-phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    depends_on:
+      - db
+
+volumes:
+  frontend_node_modules:
+  db_data:

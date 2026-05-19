@@ -1,0 +1,16 @@
+{
+  "name": "gamesvue-frontend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "@nuxt/ui": "^2.22.0",
+    "nuxt": "^3.17.0",
+    "vue": "^3.5.0"
+  }
+}
