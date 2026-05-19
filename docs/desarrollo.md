@@ -1,205 +1,169 @@
-# Desarrollo de GamesVue
+# desarrollo de GamesVue
 
-## Qué es GamesVue
+## fase actual
 
-GamesVue es un proyecto final de curso. La idea es crear una aplicación web
-sencilla que funcione como una mini tienda de videojuegos.
+En esta fase se ha creado la primera version visual del frontend
 
-En fases posteriores, los usuarios podrán registrarse, iniciar sesión, ver un
-catálogo de juegos, añadir juegos al carrito y, si son administradores, crear,
-editar o eliminar juegos y usuarios.
+Hay paginas para home login registro catalogo carrito y panel admin
 
-En esta primera fase no se desarrolla todavía la tienda completa. Solo se deja
-preparada la estructura del proyecto y el entorno de trabajo con Docker.
+Todo funciona con datos mock guardados en el navegador con localStorage
 
-## Por qué se usa Docker
+No hay conexion con PHP ni con MySQL en esta parte
 
-Docker se usa para que el proyecto se pueda ejecutar siempre de la misma forma,
-sin depender demasiado de lo que tenga instalado cada ordenador.
+## que es Nuxt
 
-Por ejemplo, el proyecto necesita Node para Nuxt, PHP con Apache para la API,
-MySQL para la base de datos y phpMyAdmin para gestionar la base de datos desde
-el navegador. Con Docker, cada parte se ejecuta en su propio entorno preparado.
+Nuxt es el framework usado para crear el frontend de GamesVue
 
-Esto ayuda a evitar problemas como:
+Esta basado en Vue y ayuda a ordenar el proyecto con carpetas claras
 
-- Tener una versión distinta de PHP.
-- No tener MySQL instalado.
-- Configurar Apache manualmente.
-- Tener errores porque en un ordenador funciona y en otro no.
+Una pagina en Nuxt es un archivo dentro de `pages`
 
-## Qué es un contenedor
+Por ejemplo `pages/games.vue` crea la ruta `/games`
 
-Un contenedor es como un entorno pequeño y aislado donde se ejecuta una parte de
-la aplicación.
+## que es un componente
 
-No es una máquina virtual completa. Es más ligero. Cada contenedor tiene lo
-necesario para ejecutar su servicio.
+Un componente es una parte reutilizable de la interfaz
 
-En GamesVue hay un contenedor para el frontend, otro para la API, otro para la
-base de datos y otro para phpMyAdmin.
+En GamesVue se usan componentes para la barra de navegacion las tarjetas de juegos los formularios y los elementos del carrito
 
-## Partes del proyecto
+Asi las paginas quedan mas limpias y el codigo es mas facil de explicar
 
-La estructura inicial del proyecto es esta:
+## que es Nuxt UI
 
-```text
-frontend/
-api/
-database/
-docker/
-docs/
-docker-compose.yml
-```
+Nuxt UI es una libreria de componentes visuales para Nuxt
 
-Cada carpeta tiene una responsabilidad:
+Se usa para tener botones tarjetas formularios avisos y navegacion ya preparados
 
-- `frontend/`: contiene la aplicación Nuxt.
-- `api/`: contiene la API hecha con PHP.
-- `database/`: queda preparada para futuros archivos SQL de la base de datos.
-- `docker/`: contiene los Dockerfile necesarios para construir los contenedores.
-- `docs/`: contiene documentacion del desarrollo.
-- `docker-compose.yml`: define y conecta todos los servicios del proyecto.
+Esto evita hacer mucho CSS manual y permite centrar el trabajo en Vue rutas componentes datos mock y funcionamiento de la tienda
 
-## Contenedor de Nuxt
+## datos mock
 
-El contenedor de Nuxt ejecuta el frontend de GamesVue.
+Los datos mock son datos falsos usados para probar la aplicacion sin base de datos real
 
-Nuxt es el framework que se usará para construir la parte visual de la
-aplicación. En esta fase solo se prepara el proyecto base, sin crear todavía las
-pantallas completas de la tienda.
+Los juegos estan en `data/mockGames.js`
 
-Este contenedor se abre en el puerto `3000`.
+Los usuarios estan en `data/mockUsers.js`
 
-URL:
+Estos datos permiten probar el catalogo el login el carrito y el panel admin
 
-```text
-http://localhost:3000
-```
+## login simulado
 
-## Contenedor de PHP
+El login busca el email y el password dentro de los usuarios mock
 
-El contenedor de PHP ejecuta Apache y sirve la API del proyecto.
+Si los datos coinciden se guarda el usuario actual en localStorage
 
-La API será la parte encargada de comunicarse con la base de datos. Más adelante
-recibirá peticiones del frontend, por ejemplo para obtener juegos, crear
-usuarios o gestionar el carrito.
+Asi la aplicacion recuerda quien ha iniciado sesion aunque se recargue la pagina
 
-En esta fase la API solo queda preparada. También se deja configurado PDO, que
-es la forma que usará PHP para conectarse a MySQL de manera ordenada.
+## is_admin
 
-Este contenedor se abre en el puerto `8080`.
+`is_admin` indica el tipo de usuario
 
-URL:
+`is_admin = 0` es un usuario normal
 
-```text
-http://localhost:8080
-```
+`is_admin = 1` es un administrador
 
-## Contenedor de MySQL
+El usuario normal puede ver juegos y usar el carrito
 
-El contenedor de MySQL contiene la base de datos del proyecto.
+El administrador tambien puede entrar al panel admin y gestionar juegos y usuarios
 
-La base de datos se llama:
+## carrito mock
 
-```text
-gamesvue
-```
+El carrito guarda juegos en localStorage
 
-Todavía no se crea la base de datos completa con todas sus tablas. En fases
-posteriores se añadirán las tablas de usuarios, juegos, carrito y pedidos si
-hacen falta.
+Cada juego del carrito tiene cantidad precio y total
 
-## Contenedor de phpMyAdmin
+Se pueden anadir juegos desde el catalogo y eliminarlos desde el carrito
 
-phpMyAdmin es una herramienta web para gestionar MySQL desde el navegador.
+No hay pagos reales
 
-Sirve para ver la base de datos, crear tablas, revisar registros y comprobar que
-la conexion con MySQL funciona.
+## panel admin
 
-Este contenedor se abre en el puerto `8081`.
+El panel admin solo se muestra si el usuario actual tiene `is_admin = 1`
 
-URL:
+Desde ese panel se pueden ver crear editar y borrar juegos
 
-```text
-http://localhost:8081
-```
+Tambien se pueden ver editar y borrar usuarios
 
-## Por qué se separan frontend, API y base de datos
+Todo sigue siendo local y mock
 
-El proyecto se separa en varias partes para que sea más fácil de entender,
-mantener y explicar.
+## API y base de datos
 
-El frontend se encarga de lo que ve el usuario. La API se encarga de la lógica y
-de responder a las peticiones. La base de datos se encarga de guardar la
-informacion.
+La API en PHP y la base de datos MySQL todavia no estan conectadas al frontend
 
-Separarlo así tiene varias ventajas:
+En esta fase el objetivo es tener clara la parte visual y el funcionamiento basico
 
-- Cada parte tiene una responsabilidad clara.
-- Es más fácil encontrar errores.
-- Se puede trabajar en el frontend sin tocar la base de datos.
-- Se puede cambiar la API sin rehacer toda la parte visual.
-- La explicación del proyecto queda más ordenada.
+Despues se podran cambiar los datos mock por datos reales desde PHP y MySQL
 
-## Comandos para levantar el proyecto
+## comandos
 
-Para construir y arrancar todos los contenedores:
+Levantar el proyecto con Docker
 
 ```bash
 docker compose up --build
 ```
 
-Para arrancarlos en segundo plano:
+Levantarlo en segundo plano
 
 ```bash
 docker compose up -d --build
 ```
 
-Para parar los contenedores:
+Parar los contenedores
 
 ```bash
 docker compose down
 ```
 
-Para ver los logs:
+## urls
 
-```bash
-docker compose logs -f
-```
-
-## URLs para comprobar que funciona
-
-Frontend Nuxt:
+Home
 
 ```text
 http://localhost:3000
 ```
 
-API PHP:
+Catalogo
 
 ```text
-http://localhost:8080
+http://localhost:3000/games
 ```
 
-phpMyAdmin:
+Login
 
 ```text
-http://localhost:8081
+http://localhost:3000/login
 ```
 
-Datos de conexion de MySQL:
+Registro
 
 ```text
-Servidor: db
-Base de datos: gamesvue
-Usuario: gamesvue_user
-Contraseña: gamesvue_password
+http://localhost:3000/register
 ```
 
-Para entrar como root en phpMyAdmin:
+Carrito
 
 ```text
-Usuario: root
-Contraseña: root_password
+http://localhost:3000/cart
+```
+
+Admin
+
+```text
+http://localhost:3000/admin
+```
+
+## usuarios de prueba
+
+Admin
+
+```text
+email admin@gamesvue.com
+password admin123
+```
+
+Usuario normal
+
+```text
+email user@gamesvue.com
+password user123
 ```
