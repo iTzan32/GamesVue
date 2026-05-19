@@ -1,140 +1,219 @@
-# Desarrollo de GamesVue
+# desarrollo de GamesVue
 
-## En que consiste el proyecto
+## que hay en el proyecto
 
-Pues la idea es crear una aplicación web sencilla que funcione como una mini tienda de videojuegos.
+GamesVue es una mini tienda de videojuegos hecha para el proyecto final
 
-Los usuarios podrán registrarse, iniciar sesión, ver un
-catálogo de juegos, añadir juegos al carrito y, si son admin, crear,
-editar o eliminar juegos y usuarios.
+Ahora mismo el proyecto tiene la estructura con Docker y la primera version visual del frontend
+
+El frontend tiene home login registro catalogo carrito y panel admin
+
+Todo el frontend funciona con datos mock guardados en localStorage
+
+No hay conexion real con PHP ni con MySQL en esta parte
 
 ## Docker
 
-He usado Docker por que es lo que he dado en el ciclo, 
-es lo mejor por que asi el proyecto se pueda ejecutar siempre de la misma forma,
-sin depender demasiado de lo que tenga instalado cada ordenador.
+He usado Docker porque es lo que he trabajado en el ciclo y ayuda a levantar el proyecto siempre de la misma forma
 
-Por ejemplo, el proyecto necesita Node para Nuxt, PHP con Apache para la API,
-MySQL para la base de datos y phpMyAdmin para gestionar la base de datos desde
-el navegador y con Docker, cada parte se ejecuta en su propio entorno
+Asi no depende tanto de lo que tenga instalado cada ordenador
 
-## Partes del proyecto
+El proyecto tiene contenedores para Nuxt PHP MySQL y phpMyAdmin
 
-La estructura inicial y en mente que tengo del proyecto de momento es esto:
+## partes del proyecto
 
+```text
 frontend/
 api/
 database/
 docker/
 docs/
 docker-compose.yml
+```
 
+Cada carpeta tiene una funcion
 
-Cada carpeta tiene una funcion:
+- `frontend/` contiene la app Nuxt
+- `api/` contiene la API hecha con PHP
+- `database/` queda preparada para los archivos SQL
+- `docker/` contiene los Dockerfile
+- `docs/` contiene la documentacion
+- `docker-compose.yml` levanta y conecta los servicios
 
-- `frontend/`: contiene la app Nuxt
-- `api/`: contiene la API hecha con PHP
-- `database/`: queda preparada para futuros archivos SQL de la base de datos y asi que salga todo desplegado donde se ejecute
-- `docker/`: contiene los Dockerfile necesarios para construir los contenedores
-- `docs/`: contiene la memoria
-- `docker-compose.yml`: define y conecta todos los servicios del proyecto
+## Nuxt
 
-## Contenedor de Nuxt
+Nuxt es el framework usado para crear el frontend
 
-El contenedor de Nuxt ejecuta el frontend de GamesVue
+Esta basado en Vue y ayuda a ordenar el proyecto por paginas y componentes
 
-Nuxt es el framework que voy a usar para contruir el apartado visual ya que viene con un css predeterminado y me puedo centrar mas en VUE API y BBDD
+Una pagina en Nuxt es un archivo dentro de `pages`
 
-Este contenedor se abre en el puerto `3000`.
+Por ejemplo `pages/games.vue` crea la ruta `/games`
 
-URL: http://localhost:3000
+## Nuxt UI
 
+Nuxt UI se usa para tener botones tarjetas formularios avisos y navegacion ya preparados
 
-## Contenedor de PHP
+Asi puedo centrarme en Vue rutas componentes y datos sin hacer mucho CSS manual
 
-El contenedor de PHP ejecuta Apache y sirve la API del proyecto
+## componentes
 
-La API será la parte encargada de comunicarse con la base de datos y solicitar los datos para mostrarlos por el front, 
-pidiendole datos a la BD para mostrar al usuario
-Este contenedor se abre en el puerto `8080`.
+Un componente es una parte reutilizable de la interfaz
 
-URL: http://localhost:8080
+En GamesVue hay componentes para la barra de navegacion las tarjetas de juegos los formularios y el carrito
 
-## Contenedor de MySQL
+Esto hace que las paginas sean mas claras
 
-El contenedor de MySQL contiene la base de datos del proyecto
+## datos mock
 
-La base de datos se llama: gamesvue
+Los datos mock son datos falsos para probar la aplicacion sin base de datos real
 
-## Contenedor de phpMyAdmin
+Los juegos estan en `data/mockGames.js`
 
-phpMyAdmin es una herramienta web para gestionar MySQL desde el navegador y poder ir metiendo cosas aunque luego estara todo en el sql
+Los usuarios estan en `data/mockUsers.js`
 
-Sirve para ver la base de datos, crear tablas, revisar registros y comprobar que
-la conexion con MySQL funciona
+El carrito y el usuario actual se guardan en localStorage
 
-Este contenedor se abre en el puerto `8081`
+## login
 
-URL: http://localhost:8081
+El login compara el email y el password con los usuarios mock
 
-## Comandos para levantar el proyecto
+Si coinciden se guarda el usuario actual en localStorage
 
-Para construir y arrancar todos los contenedores:
+Hay un usuario normal y un usuario admin
+
+## is_admin
+
+`is_admin = 0` significa usuario normal
+
+`is_admin = 1` significa administrador
+
+El usuario normal puede ver juegos y usar el carrito
+
+El administrador tambien puede entrar al panel admin y gestionar juegos y usuarios
+
+## carrito
+
+El carrito funciona de forma mock
+
+Se pueden anadir juegos desde el catalogo
+
+Se puede ver la cantidad el precio y el total
+
+Tambien se pueden eliminar juegos del carrito
+
+No hay pagos reales
+
+## panel admin
+
+El panel admin solo esta disponible para usuarios con `is_admin = 1`
+
+Desde el panel admin se pueden ver crear editar y borrar juegos
+
+Tambien se pueden ver editar y borrar usuarios
+
+Todo se guarda de forma local
+
+## API y base de datos
+
+PHP y MySQL estan preparados en Docker
+
+La API se abre en el puerto `8080`
+
+MySQL tiene la base de datos `gamesvue`
+
+phpMyAdmin se abre en el puerto `8081`
+
+El frontend todavia usa mocks y no pide datos reales a la API
+
+## comandos
+
+Levantar el proyecto con Docker
 
 ```bash
 docker compose up --build
 ```
 
-Para arrancarlos en segundo plano:
+Levantarlo en segundo plano
 
 ```bash
 docker compose up -d --build
 ```
 
-Para parar los contenedores:
+Parar los contenedores
 
 ```bash
 docker compose down
 ```
 
-Para ver los logs:
+Ver logs
 
 ```bash
 docker compose logs -f
 ```
 
-## URLs para comprobar que funciona
+## urls
 
-Frontend Nuxt:
+Home
 
 ```text
 http://localhost:3000
 ```
 
-API PHP:
+Catalogo
+
+```text
+http://localhost:3000/games
+```
+
+Login
+
+```text
+http://localhost:3000/login
+```
+
+Registro
+
+```text
+http://localhost:3000/register
+```
+
+Carrito
+
+```text
+http://localhost:3000/cart
+```
+
+Admin
+
+```text
+http://localhost:3000/admin
+```
+
+API PHP
 
 ```text
 http://localhost:8080
 ```
 
-phpMyAdmin:
+phpMyAdmin
 
 ```text
 http://localhost:8081
 ```
 
-Datos de conexion de MySQL:
+## usuarios de prueba
+
+Admin
 
 ```text
-Servidor: db
-Base de datos: gamesvue
-Usuario: gamesvue_user
-Contraseña: gamesvue_password
+email admin@gamesvue.com
+password admin123
 ```
 
-Para entrar como root en phpMyAdmin:
+Usuario normal
 
 ```text
-Usuario: root
-Contraseña: root_password
+email user@gamesvue.com
+password user123
 ```
