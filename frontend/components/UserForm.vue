@@ -70,7 +70,7 @@ const save = () => {
       </div>
     </form>
 
-    <p v-else class="text-sm text-gray-600">
+    <p v-else class="text-sm text-gray-300">
       selecciona un usuario para editarlo
     </p>
   </UCard>

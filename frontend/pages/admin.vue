@@ -41,7 +41,7 @@ const saveUser = (user) => {
   <section class="grid gap-6">
     <div>
       <h1 class="text-3xl font-bold">panel admin</h1>
-      <p class="mt-2 text-gray-600">
+      <p class="mt-2 text-gray-300">
         gestion local de juegos y usuarios
       </p>
     </div>
@@ -82,7 +82,7 @@ const saveUser = (user) => {
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p class="font-semibold">{{ game.image }} {{ game.title }}</p>
-                <p class="text-sm text-gray-600">
+                <p class="text-sm text-gray-300">
                   {{ game.platform }} · {{ game.price.toFixed(2) }} € · stock {{ game.stock }}
                 </p>
               </div>
@@ -112,7 +112,7 @@ const saveUser = (user) => {
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p class="font-semibold">{{ user.name }}</p>
-                <p class="text-sm text-gray-600">
+                <p class="text-sm text-gray-300">
                   {{ user.email }} · is_admin {{ user.is_admin }}
                 </p>
               </div>

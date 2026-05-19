@@ -15,7 +15,7 @@ defineEmits(['add'])
       <div class="flex items-start justify-between gap-3">
         <div>
           <p class="text-4xl">{{ game.image }}</p>
-          <h2 class="mt-3 text-lg font-semibold">{{ game.title }}</h2>
+          <h2 class="mt-3 text-lg font-semibold text-gray-100">{{ game.title }}</h2>
         </div>
         <UBadge :color="game.stock > 0 ? 'green' : 'red'" variant="soft">
           {{ game.stock > 0 ? `${game.stock} en stock` : 'sin stock' }}
@@ -23,7 +23,7 @@ defineEmits(['add'])
       </div>
     </template>
 
-    <p class="text-sm text-gray-600">{{ game.description }}</p>
+    <p class="text-sm text-gray-300">{{ game.description }}</p>
 
     <div class="mt-4 flex flex-wrap gap-2">
       <UBadge color="gray" variant="soft">{{ game.genre }}</UBadge>
@@ -32,7 +32,7 @@ defineEmits(['add'])
 
     <template #footer>
       <div class="flex items-center justify-between gap-3">
-        <p class="text-lg font-bold">{{ game.price.toFixed(2) }} €</p>
+        <p class="text-lg font-bold text-gray-100">{{ game.price.toFixed(2) }} €</p>
         <UButton :disabled="game.stock === 0" @click="$emit('add', game)">
           {{ game.stock === 0 ? 'sin stock' : 'anadir' }}
         </UButton>

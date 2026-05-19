@@ -18,7 +18,7 @@ const addGame = (game) => {
     <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <h1 class="text-3xl font-bold">catalogo</h1>
-        <p class="mt-2 text-gray-600">
+        <p class="mt-2 text-gray-300">
           juegos cargados con datos mock
         </p>
       </div>
