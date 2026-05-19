@@ -32,7 +32,7 @@ const submit = async () => {
       <template #header>
         <div>
           <h1 class="text-2xl font-bold">login</h1>
-          <p class="mt-1 text-sm text-gray-600">
+          <p class="mt-1 text-sm text-gray-300">
             acceso simulado con usuarios mock
           </p>
         </div>

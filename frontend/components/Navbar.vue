@@ -8,9 +8,9 @@ const closeSession = async () => {
 </script>
 
 <template>
-  <header class="border-b border-gray-200 bg-white">
+  <header class="border-b border-gray-800 bg-gray-950">
     <nav class="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
-      <NuxtLink to="/" class="text-xl font-bold text-primary-600">
+      <NuxtLink to="/" class="text-xl font-bold text-primary-400">
         GamesVue
       </NuxtLink>
 
@@ -31,7 +31,7 @@ const closeSession = async () => {
           registro
         </UButton>
         <div v-else class="flex items-center gap-2">
-          <span class="text-sm text-gray-600">{{ currentUser.name }}</span>
+          <span class="text-sm text-gray-300">{{ currentUser.name }}</span>
           <UButton color="gray" variant="soft" @click="closeSession">
             salir
           </UButton>
