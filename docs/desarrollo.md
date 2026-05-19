@@ -1,98 +1,130 @@
 # desarrollo de GamesVue
 
-## fase actual
+## que hay en el proyecto
 
-En esta fase se ha creado la primera version visual del frontend
+GamesVue es una mini tienda de videojuegos hecha para el proyecto final
 
-Hay paginas para home login registro catalogo carrito y panel admin
+Ahora mismo el proyecto tiene la estructura con Docker y la primera version visual del frontend
 
-Todo funciona con datos mock guardados en el navegador con localStorage
+El frontend tiene home login registro catalogo carrito y panel admin
 
-No hay conexion con PHP ni con MySQL en esta parte
+Todo el frontend funciona con datos mock guardados en localStorage
 
-## que es Nuxt
+No hay conexion real con PHP ni con MySQL en esta parte
 
-Nuxt es el framework usado para crear el frontend de GamesVue
+## Docker
 
-Esta basado en Vue y ayuda a ordenar el proyecto con carpetas claras
+He usado Docker porque es lo que he trabajado en el ciclo y ayuda a levantar el proyecto siempre de la misma forma
+
+Asi no depende tanto de lo que tenga instalado cada ordenador
+
+El proyecto tiene contenedores para Nuxt PHP MySQL y phpMyAdmin
+
+## partes del proyecto
+
+```text
+frontend/
+api/
+database/
+docker/
+docs/
+docker-compose.yml
+```
+
+Cada carpeta tiene una funcion
+
+- `frontend/` contiene la app Nuxt
+- `api/` contiene la API hecha con PHP
+- `database/` queda preparada para los archivos SQL
+- `docker/` contiene los Dockerfile
+- `docs/` contiene la documentacion
+- `docker-compose.yml` levanta y conecta los servicios
+
+## Nuxt
+
+Nuxt es el framework usado para crear el frontend
+
+Esta basado en Vue y ayuda a ordenar el proyecto por paginas y componentes
 
 Una pagina en Nuxt es un archivo dentro de `pages`
 
 Por ejemplo `pages/games.vue` crea la ruta `/games`
 
-## que es un componente
+## Nuxt UI
+
+Nuxt UI se usa para tener botones tarjetas formularios avisos y navegacion ya preparados
+
+Asi puedo centrarme en Vue rutas componentes y datos sin hacer mucho CSS manual
+
+## componentes
 
 Un componente es una parte reutilizable de la interfaz
 
-En GamesVue se usan componentes para la barra de navegacion las tarjetas de juegos los formularios y los elementos del carrito
+En GamesVue hay componentes para la barra de navegacion las tarjetas de juegos los formularios y el carrito
 
-Asi las paginas quedan mas limpias y el codigo es mas facil de explicar
-
-## que es Nuxt UI
-
-Nuxt UI es una libreria de componentes visuales para Nuxt
-
-Se usa para tener botones tarjetas formularios avisos y navegacion ya preparados
-
-Esto evita hacer mucho CSS manual y permite centrar el trabajo en Vue rutas componentes datos mock y funcionamiento de la tienda
+Esto hace que las paginas sean mas claras
 
 ## datos mock
 
-Los datos mock son datos falsos usados para probar la aplicacion sin base de datos real
+Los datos mock son datos falsos para probar la aplicacion sin base de datos real
 
 Los juegos estan en `data/mockGames.js`
 
 Los usuarios estan en `data/mockUsers.js`
 
-Estos datos permiten probar el catalogo el login el carrito y el panel admin
+El carrito y el usuario actual se guardan en localStorage
 
-## login simulado
+## login
 
-El login busca el email y el password dentro de los usuarios mock
+El login compara el email y el password con los usuarios mock
 
-Si los datos coinciden se guarda el usuario actual en localStorage
+Si coinciden se guarda el usuario actual en localStorage
 
-Asi la aplicacion recuerda quien ha iniciado sesion aunque se recargue la pagina
+Hay un usuario normal y un usuario admin
 
 ## is_admin
 
-`is_admin` indica el tipo de usuario
+`is_admin = 0` significa usuario normal
 
-`is_admin = 0` es un usuario normal
-
-`is_admin = 1` es un administrador
+`is_admin = 1` significa administrador
 
 El usuario normal puede ver juegos y usar el carrito
 
 El administrador tambien puede entrar al panel admin y gestionar juegos y usuarios
 
-## carrito mock
+## carrito
 
-El carrito guarda juegos en localStorage
+El carrito funciona de forma mock
 
-Cada juego del carrito tiene cantidad precio y total
+Se pueden anadir juegos desde el catalogo
 
-Se pueden anadir juegos desde el catalogo y eliminarlos desde el carrito
+Se puede ver la cantidad el precio y el total
+
+Tambien se pueden eliminar juegos del carrito
 
 No hay pagos reales
 
 ## panel admin
 
-El panel admin solo se muestra si el usuario actual tiene `is_admin = 1`
+El panel admin solo esta disponible para usuarios con `is_admin = 1`
 
-Desde ese panel se pueden ver crear editar y borrar juegos
+Desde el panel admin se pueden ver crear editar y borrar juegos
 
 Tambien se pueden ver editar y borrar usuarios
 
-Todo sigue siendo local y mock
+Todo se guarda de forma local
 
 ## API y base de datos
 
-La API en PHP y la base de datos MySQL todavia no estan conectadas al frontend
+PHP y MySQL estan preparados en Docker
 
-En esta fase el objetivo es tener clara la parte visual y el funcionamiento basico
+La API se abre en el puerto `8080`
 
-Despues se podran cambiar los datos mock por datos reales desde PHP y MySQL
+MySQL tiene la base de datos `gamesvue`
+
+phpMyAdmin se abre en el puerto `8081`
+
+El frontend todavia usa mocks y no pide datos reales a la API
 
 ## comandos
 
@@ -112,6 +144,12 @@ Parar los contenedores
 
 ```bash
 docker compose down
+```
+
+Ver logs
+
+```bash
+docker compose logs -f
 ```
 
 ## urls
@@ -150,6 +188,18 @@ Admin
 
 ```text
 http://localhost:3000/admin
+```
+
+API PHP
+
+```text
+http://localhost:8080
+```
+
+phpMyAdmin
+
+```text
+http://localhost:8081
 ```
 
 ## usuarios de prueba
