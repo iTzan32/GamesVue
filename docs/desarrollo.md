@@ -4,13 +4,13 @@
 
 GamesVue es una mini tienda de videojuegos hecha para el proyecto final
 
-Ahora mismo el proyecto tiene la estructura con Docker y la primera version visual del frontend
+Ahora mismo el proyecto tiene la estructura con Docker, frontend, API y base de datos
 
 El frontend tiene home login registro catalogo carrito y panel admin
 
-Todo el frontend funciona con datos mock guardados en localStorage
+El catalogo, login, registro y panel admin se comunican con PHP y MySQL
 
-No hay conexion real con PHP ni con MySQL en esta parte
+El carrito se mantiene en localStorage porque no hay pagos reales en esta version
 
 ## Docker
 
@@ -64,21 +64,21 @@ En GamesVue hay componentes para la barra de navegacion las tarjetas de juegos l
 
 Esto hace que las paginas sean mas claras
 
-## datos mock
+## datos
 
-Los datos mock son datos falsos para probar la aplicacion sin base de datos real
+Los juegos y usuarios se guardan en MySQL
 
-Los juegos estan en `data/mockGames.js`
+La API PHP lee y escribe en la base de datos usando PDO
 
-Los usuarios estan en `data/mockUsers.js`
-
-El carrito y el usuario actual se guardan en localStorage
+El carrito y el usuario actual se guardan en localStorage para simplificar la demo
 
 ## login
 
-El login compara el email y el password con los usuarios mock
+El login envia el email y el password a la API
 
-Si coinciden se guarda el usuario actual en localStorage
+La API comprueba el password con `password_verify`
+
+Si coincide se guarda el usuario actual en localStorage
 
 Hay un usuario normal y un usuario admin
 
@@ -94,7 +94,7 @@ El administrador tambien puede entrar al panel admin y gestionar juegos y usuari
 
 ## carrito
 
-El carrito funciona de forma mock
+El carrito funciona de forma local
 
 Se pueden anadir juegos desde el catalogo
 
@@ -112,7 +112,7 @@ Desde el panel admin se pueden ver crear editar y borrar juegos
 
 Tambien se pueden ver editar y borrar usuarios
 
-Todo se guarda de forma local
+Los cambios se guardan en MySQL mediante la API
 
 ## API y base de datos
 
@@ -122,7 +122,7 @@ La base de datos se inicializa con `database/init/BBDD.sql`
 
 Ese archivo crea las tablas `users`, `games`, `cart_items`, `orders` y `order_items`
 
-Tambien carga usuarios y juegos de prueba parecidos a los datos mock del frontend
+Tambien carga usuarios y juegos de prueba para la demo
 
 La API se abre en el puerto `8080`
 
@@ -130,7 +130,25 @@ MySQL tiene la base de datos `gamesvue`
 
 phpMyAdmin se abre en el puerto `8081`
 
-El frontend todavia usa mocks y no pide datos reales a la API
+El frontend pide datos reales a la API PHP
+
+El archivo `api/index.php` hace de router sencillo
+
+La logica se reparte en `api/usuarios.php`, `api/juegos.php` y `api/admin.php`
+
+Endpoints principales de la API
+
+```text
+GET    http://localhost:8080/index.php/games
+POST   http://localhost:8080/index.php/games
+PUT    http://localhost:8080/index.php/games/{id}
+DELETE http://localhost:8080/index.php/games/{id}
+POST   http://localhost:8080/index.php/login
+POST   http://localhost:8080/index.php/register
+GET    http://localhost:8080/index.php/users
+PUT    http://localhost:8080/index.php/users/{id}
+DELETE http://localhost:8080/index.php/users/{id}
+```
 
 ## comandos
 

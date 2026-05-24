@@ -9,7 +9,7 @@
       </h1>
       <p class="mt-4 max-w-2xl text-lg text-gray-300">
         GamesVue es una primera version visual de una tienda de videojuegos
-        hecha con Nuxt y Nuxt UI usando datos mock
+        hecha con Nuxt, PHP y MySQL
       </p>
 
       <div class="mt-6 flex flex-wrap gap-3">
@@ -29,9 +29,9 @@
       <div class="grid gap-4">
         <div class="rounded bg-gray-900 p-4">
           <p class="text-5xl">🎮</p>
-          <h2 class="mt-4 text-xl font-semibold">frontend mock</h2>
+          <h2 class="mt-4 text-xl font-semibold">frontend conectado</h2>
           <p class="mt-2 text-sm text-gray-300">
-            catalogo carrito login registro y panel admin con datos locales
+            catalogo login registro y panel admin con datos de la API
           </p>
         </div>
         <UButton to="/games" block variant="soft">

@@ -1,8 +1,8 @@
 <script setup>
-const { cart, cartTotal, removeFromCart, loadData } = useMockStore()
+const { cart, cartTotal, removeFromCart, loadData } = useGameStore()
 
-onMounted(() => {
-  loadData()
+onMounted(async () => {
+  await loadData()
 })
 </script>
 
@@ -12,7 +12,7 @@ onMounted(() => {
       <div>
         <h1 class="text-3xl font-bold">carrito</h1>
         <p class="mt-2 text-gray-300">
-          carrito mock guardado en localStorage
+          carrito guardado en localStorage
         </p>
       </div>
       <UButton to="/games" variant="soft">

@@ -1,5 +1,5 @@
 <script setup>
-const { currentUser, isAdmin, logout } = useMockStore()
+const { currentUser, isAdmin, logout } = useGameStore()
 
 const closeSession = async () => {
   logout()

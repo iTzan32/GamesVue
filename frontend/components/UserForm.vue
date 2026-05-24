@@ -20,7 +20,7 @@ watch(
   () => props.user,
   (user) => {
     if (user) {
-      Object.assign(form, { ...user })
+      Object.assign(form, { ...user, password: '' })
     }
   },
   { immediate: true }
@@ -47,7 +47,7 @@ const save = () => {
       </UFormGroup>
 
       <UFormGroup label="password">
-        <UInput v-model="form.password" required />
+        <UInput v-model="form.password" type="password" placeholder="dejar vacio para no cambiarlo" />
       </UFormGroup>
 
       <UFormGroup label="tipo">

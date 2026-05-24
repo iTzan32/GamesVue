@@ -1,11 +1,11 @@
 <script setup>
-const { loadData } = useMockStore()
+const { loadData } = useGameStore()
 const colorMode = useColorMode()
 
 colorMode.preference = 'dark'
 
-onMounted(() => {
-  loadData()
+onMounted(async () => {
+  await loadData()
   colorMode.preference = 'dark'
 })
 </script>
