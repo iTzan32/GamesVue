@@ -63,6 +63,7 @@ function idFromRoute(array $parts): int
 require __DIR__ . '/usuarios.php';
 require __DIR__ . '/juegos.php';
 require __DIR__ . '/admin.php';
+require __DIR__ . '/carrito.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 $parts = routeParts();
@@ -81,6 +82,7 @@ try {
                 'POST /index.php/login',
                 'POST /index.php/register',
                 'GET /index.php/users',
+                'POST /index.php/checkout',
             ],
         ]);
     }
@@ -95,6 +97,10 @@ try {
 
     if ($resource === 'users') {
         handleAdmin($db, $method, $parts);
+    }
+
+    if ($resource === 'checkout') {
+        handleCarrito($db, $method);
     }
 
     sendJson(['error' => 'ruta no encontrada'], 404);

@@ -1,9 +1,32 @@
 <script setup>
-const { cart, cartTotal, removeFromCart, loadData } = useGameStore()
+const {
+  cart,
+  cartTotal,
+  currentUser,
+  removeFromCart,
+  loadData,
+  checkoutCart
+} = useGameStore()
+
+const loading = ref(false)
+const error = ref('')
 
 onMounted(async () => {
   await loadData()
 })
+
+const checkout = async () => {
+  error.value = ''
+  loading.value = true
+
+  try {
+    await checkoutCart()
+  } catch (checkoutError) {
+    error.value = checkoutError?.data?.error || checkoutError.message || 'no se ha podido finalizar la compra'
+  } finally {
+    loading.value = false
+  }
+}
 </script>
 
 <template>
@@ -12,7 +35,7 @@ onMounted(async () => {
       <div>
         <h1 class="text-3xl font-bold">carrito</h1>
         <p class="mt-2 text-gray-300">
-          carrito guardado en localStorage
+          revisa tus juegos antes de finalizar la compra
         </p>
       </div>
       <UButton to="/games" variant="soft">
@@ -25,6 +48,8 @@ onMounted(async () => {
       variant="soft"
       description="el carrito esta vacio"
     />
+
+    <UAlert v-if="error" color="red" variant="soft" :description="error" />
 
     <div v-else class="grid gap-4">
       <CartItem
@@ -39,8 +64,17 @@ onMounted(async () => {
           <p class="text-lg font-semibold">total</p>
           <p class="text-2xl font-bold">{{ cartTotal.toFixed(2) }} €</p>
         </div>
-        <p class="mt-3 text-sm text-gray-300">
-          no hay pagos reales en esta version
+        <UButton
+          class="mt-4"
+          block
+          :loading="loading"
+          :disabled="!currentUser"
+          @click="checkout"
+        >
+          finalizar compra
+        </UButton>
+        <p v-if="!currentUser" class="mt-3 text-sm text-gray-300">
+          inicia sesion para guardar la compra
         </p>
       </UCard>
     </div>

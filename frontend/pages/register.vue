@@ -25,10 +25,7 @@ const submit = async () => {
     return
   }
 
-  message.value = 'usuario creado como usuario normal'
-  form.name = ''
-  form.email = ''
-  form.password = ''
+  await navigateTo('/games')
 }
 </script>
 

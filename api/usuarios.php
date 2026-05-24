@@ -6,6 +6,8 @@ function cleanUser(array $user): array
         'id' => (int) $user['id'],
         'name' => $user['name'],
         'email' => $user['email'],
+        'direccion' => $user['direccion'] ?? '',
+        'telefono' => $user['telefono'] ?? '',
         'is_admin' => (int) $user['is_admin'],
     ];
 }
@@ -48,6 +50,8 @@ function handleUsuarios(PDO $db, string $method, string $resource): void
                 'id' => (int) $db->lastInsertId(),
                 'name' => $name,
                 'email' => $email,
+                'direccion' => '',
+                'telefono' => '',
                 'is_admin' => 0,
             ],
         ], 201);

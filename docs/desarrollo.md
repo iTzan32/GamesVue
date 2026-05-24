@@ -6,11 +6,13 @@ GamesVue es una mini tienda de videojuegos hecha para el proyecto final
 
 Ahora mismo el proyecto tiene la estructura con Docker, frontend, API y base de datos
 
-El frontend tiene home login registro catalogo carrito y panel admin
+El frontend tiene home login registro catalogo carrito perfil y panel admin
 
-El catalogo, login, registro y panel admin se comunican con PHP y MySQL
+El catalogo, login, registro, perfil y panel admin se comunican con PHP y MySQL
 
-El carrito se mantiene en localStorage porque no hay pagos reales en esta version
+El carrito se mantiene en localStorage hasta finalizar la compra
+
+Al finalizar compra se guarda una compra en MySQL
 
 ## Docker
 
@@ -72,6 +74,8 @@ La API PHP lee y escribe en la base de datos usando PDO
 
 El carrito y el usuario actual se guardan en localStorage para simplificar la demo
 
+Cuando se pulsa finalizar compra, la API guarda la compra en `historial_compras`
+
 ## login
 
 El login envia el email y el password a la API
@@ -81,6 +85,8 @@ La API comprueba el password con `password_verify`
 Si coincide se guarda el usuario actual en localStorage
 
 Hay un usuario normal y un usuario admin
+
+Cada usuario tiene nombre, email, direccion y telefono
 
 ## is_admin
 
@@ -102,7 +108,15 @@ Se puede ver la cantidad el precio y el total
 
 Tambien se pueden eliminar juegos del carrito
 
-No hay pagos reales
+Al cerrar sesion el carrito se vacia
+
+Al finalizar compra se guarda el historial y se descuenta stock
+
+## perfil
+
+Cada usuario puede entrar a su perfil pulsando su nombre en la barra superior
+
+Desde el perfil puede editar su nombre, email, direccion, telefono y password
 
 ## panel admin
 
@@ -120,7 +134,7 @@ PHP y MySQL estan preparados en Docker
 
 La base de datos se inicializa con `database/init/BBDD.sql`
 
-Ese archivo crea las tablas `users`, `games`, `cart_items`, `orders` y `order_items`
+Ese archivo crea las tablas `users`, `games` y `historial_compras`
 
 Tambien carga usuarios y juegos de prueba para la demo
 
@@ -148,6 +162,7 @@ POST   http://localhost:8080/index.php/register
 GET    http://localhost:8080/index.php/users
 PUT    http://localhost:8080/index.php/users/{id}
 DELETE http://localhost:8080/index.php/users/{id}
+POST   http://localhost:8080/index.php/checkout
 ```
 
 ## comandos

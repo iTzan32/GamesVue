@@ -12,6 +12,8 @@ const form = reactive({
   id: '',
   name: '',
   email: '',
+  direccion: '',
+  telefono: '',
   password: '',
   is_admin: 0
 })
@@ -44,6 +46,14 @@ const save = () => {
 
       <UFormGroup label="email">
         <UInput v-model="form.email" type="email" required />
+      </UFormGroup>
+
+      <UFormGroup label="direccion">
+        <UInput v-model="form.direccion" />
+      </UFormGroup>
+
+      <UFormGroup label="telefono">
+        <UInput v-model="form.telefono" />
       </UFormGroup>
 
       <UFormGroup label="password">

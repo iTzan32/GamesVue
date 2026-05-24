@@ -5,6 +5,8 @@ const keys = {
 
 const copy = (value) => JSON.parse(JSON.stringify(value))
 
+const hasAdminRole = (user) => Number(user?.is_admin) === 1
+
 export const useGameStore = () => {
   const config = useRuntimeConfig()
   const games = useState('gamesvue_games', () => [])
@@ -47,7 +49,7 @@ export const useGameStore = () => {
 
     await loadGames()
 
-    if (currentUser.value?.is_admin === 1) {
+    if (hasAdminRole(currentUser.value)) {
       await loadUsers()
     }
   }
@@ -64,7 +66,7 @@ export const useGameStore = () => {
       currentUser.value = response.user
       write(keys.currentUser, currentUser.value)
 
-      if (currentUser.value?.is_admin === 1) {
+      if (hasAdminRole(currentUser.value)) {
         await loadUsers()
       }
 
@@ -77,9 +79,11 @@ export const useGameStore = () => {
   const logout = () => {
     currentUser.value = null
     users.value = []
+    cart.value = []
 
     if (process.client) {
       localStorage.removeItem(keys.currentUser)
+      localStorage.removeItem(keys.cart)
     }
   }
 
@@ -90,8 +94,9 @@ export const useGameStore = () => {
         body: userData
       })
 
-      if (currentUser.value?.is_admin === 1 && response.user) {
-        users.value.push(response.user)
+      if (response.user) {
+        currentUser.value = response.user
+        write(keys.currentUser, currentUser.value)
       }
 
       return true
@@ -200,11 +205,34 @@ export const useGameStore = () => {
     }
   }
 
+  const checkoutCart = async () => {
+    if (!currentUser.value) {
+      throw new Error('inicia sesion para finalizar la compra')
+    }
+
+    const response = await api('/checkout', {
+      method: 'POST',
+      body: {
+        user_id: currentUser.value.id,
+        items: cart.value.map((item) => ({
+          id: item.id,
+          quantity: item.quantity
+        }))
+      }
+    })
+
+    cart.value = []
+    saveCart()
+    await loadGames()
+
+    return response.compra
+  }
+
   const cartTotal = computed(() => (
     cart.value.reduce((total, item) => total + item.price * item.quantity, 0)
   ))
 
-  const isAdmin = computed(() => currentUser.value?.is_admin === 1)
+  const isAdmin = computed(() => hasAdminRole(currentUser.value))
 
   return {
     games,
@@ -223,6 +251,7 @@ export const useGameStore = () => {
     updateGame,
     deleteGame,
     updateUser,
-    deleteUser
+    deleteUser,
+    checkoutCart
   }
 }
