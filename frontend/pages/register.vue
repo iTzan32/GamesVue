@@ -1,5 +1,5 @@
 <script setup>
-const { registerUser, loadData } = useMockStore()
+const { registerUser, loadData } = useGameStore()
 
 const form = reactive({
   name: '',
@@ -10,15 +10,15 @@ const form = reactive({
 const message = ref('')
 const error = ref('')
 
-onMounted(() => {
-  loadData()
+onMounted(async () => {
+  await loadData()
 })
 
-const submit = () => {
+const submit = async () => {
   message.value = ''
   error.value = ''
 
-  const created = registerUser(form)
+  const created = await registerUser(form)
 
   if (!created) {
     error.value = 'ya existe un usuario con ese email'
@@ -39,7 +39,7 @@ const submit = () => {
         <div>
           <h1 class="text-2xl font-bold">registro</h1>
           <p class="mt-1 text-sm text-gray-300">
-            los usuarios nuevos se guardan en localStorage
+            los usuarios nuevos se guardan en MySQL
           </p>
         </div>
       </template>

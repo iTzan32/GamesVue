@@ -10,29 +10,29 @@ const {
   deleteGame,
   updateUser,
   deleteUser
-} = useMockStore()
+} = useGameStore()
 
 const selectedGame = ref(null)
 const selectedUser = ref(null)
 const ready = ref(false)
 
-onMounted(() => {
-  loadData()
+onMounted(async () => {
+  await loadData()
   ready.value = true
 })
 
-const saveGame = (game) => {
+const saveGame = async (game) => {
   if (selectedGame.value) {
-    updateGame(game)
+    await updateGame(game)
   } else {
-    createGame(game)
+    await createGame(game)
   }
 
   selectedGame.value = null
 }
 
-const saveUser = (user) => {
-  updateUser(user)
+const saveUser = async (user) => {
+  await updateUser(user)
   selectedUser.value = null
 }
 </script>
@@ -42,14 +42,14 @@ const saveUser = (user) => {
     <div>
       <h1 class="text-3xl font-bold">panel admin</h1>
       <p class="mt-2 text-gray-300">
-        gestion local de juegos y usuarios
+        gestion de juegos y usuarios en MySQL
       </p>
     </div>
 
     <UAlert
       v-if="!ready"
       variant="soft"
-      description="cargando datos locales"
+      description="cargando datos de la API"
     />
 
     <UAlert

@@ -1,5 +1,5 @@
 <script setup>
-const { login, loadData } = useMockStore()
+const { login, loadData } = useGameStore()
 
 const form = reactive({
   email: '',
@@ -8,14 +8,14 @@ const form = reactive({
 
 const error = ref('')
 
-onMounted(() => {
-  loadData()
+onMounted(async () => {
+  await loadData()
 })
 
 const submit = async () => {
   error.value = ''
 
-  const logged = login(form.email, form.password)
+  const logged = await login(form.email, form.password)
 
   if (!logged) {
     error.value = 'email o password incorrectos'
@@ -33,7 +33,7 @@ const submit = async () => {
         <div>
           <h1 class="text-2xl font-bold">login</h1>
           <p class="mt-1 text-sm text-gray-300">
-            acceso simulado con usuarios mock
+            acceso con API PHP y MySQL
           </p>
         </div>
       </template>

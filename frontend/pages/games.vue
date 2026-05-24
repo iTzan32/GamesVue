@@ -1,10 +1,10 @@
 <script setup>
-const { games, addToCart, loadData } = useMockStore()
+const { games, addToCart, loadData } = useGameStore()
 
 const message = ref('')
 
-onMounted(() => {
-  loadData()
+onMounted(async () => {
+  await loadData()
 })
 
 const addGame = (game) => {
@@ -19,7 +19,7 @@ const addGame = (game) => {
       <div>
         <h1 class="text-3xl font-bold">catalogo</h1>
         <p class="mt-2 text-gray-300">
-          juegos cargados con datos mock
+          juegos cargados desde MySQL
         </p>
       </div>
       <UButton to="/cart" variant="soft">
