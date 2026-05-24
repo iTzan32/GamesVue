@@ -31,7 +31,9 @@ const closeSession = async () => {
           registro
         </UButton>
         <div v-else class="flex items-center gap-2">
-          <span class="text-sm text-gray-300">{{ currentUser.name }}</span>
+          <UButton to="/profile" color="gray" variant="ghost">
+            {{ currentUser.name }}
+          </UButton>
           <UButton color="gray" variant="soft" @click="closeSession">
             salir
           </UButton>
