@@ -118,6 +118,12 @@ Todo se guarda de forma local
 
 PHP y MySQL estan preparados en Docker
 
+La base de datos se inicializa con `database/init/BBDD.sql`
+
+Ese archivo crea las tablas `users`, `games`, `cart_items`, `orders` y `order_items`
+
+Tambien carga usuarios y juegos de prueba parecidos a los datos mock del frontend
+
 La API se abre en el puerto `8080`
 
 MySQL tiene la base de datos `gamesvue`
@@ -207,13 +213,13 @@ http://localhost:8081
 Admin
 
 ```text
-email admin@gamesvue.com
-password admin123
+email izanbelcam@icloud.com
+password 1607
 ```
 
 Usuario normal
 
 ```text
-email user@gamesvue.com
-password user123
+email adrian@gmail.com
+password 12345678
 ```

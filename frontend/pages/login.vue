@@ -40,11 +40,11 @@ const submit = async () => {
 
       <form class="grid gap-4" @submit.prevent="submit">
         <UFormGroup label="email">
-          <UInput v-model="form.email" type="email" placeholder="admin@gamesvue.com" required />
+          <UInput v-model="form.email" type="email" placeholder="izanbelcam@icloud.com" required />
         </UFormGroup>
 
         <UFormGroup label="password">
-          <UInput v-model="form.password" type="password" placeholder="admin123" required />
+          <UInput v-model="form.password" type="password" placeholder="1607" required />
         </UFormGroup>
 
         <UAlert v-if="error" color="red" variant="soft" :description="error" />
