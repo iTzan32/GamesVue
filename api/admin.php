@@ -1,12 +1,15 @@
 <?php
 
+// Controlador para gestionar usuarios desde admin.
 function handleAdmin(PDO $db, string $method, array $parts): void
 {
+    // Lista usuarios sin mostrar password_hash.
     if ($method === 'GET') {
         $stmt = $db->query('SELECT id, name, email, direccion, telefono, is_admin FROM users ORDER BY id');
         sendJson(['users' => array_map('cleanUser', $stmt->fetchAll())]);
     }
 
+    // Actualiza datos y rol de usuario.
     if ($method === 'PUT') {
         $id = idFromRoute($parts);
         $data = readJson();
@@ -28,10 +31,12 @@ function handleAdmin(PDO $db, string $method, array $parts): void
             sendJson(['error' => 'usuario no encontrado'], 404);
         }
 
+        // Si no llega is_admin, conserva el rol anterior.
         $isAdmin = array_key_exists('is_admin', $data)
             ? (int) $data['is_admin']
             : (int) $currentUser['is_admin'];
 
+        // Solo cambia password si el campo no esta vacio.
         if (trim($password) !== '') {
             $stmt = $db->prepare(
                 'UPDATE users SET name = ?, email = ?, direccion = ?, telefono = ?, password_hash = ?, is_admin = ? WHERE id = ?'
@@ -55,6 +60,7 @@ function handleAdmin(PDO $db, string $method, array $parts): void
         sendJson(['user' => cleanUser($user)]);
     }
 
+    // Borra usuario por id.
     if ($method === 'DELETE') {
         $id = idFromRoute($parts);
         $stmt = $db->prepare('DELETE FROM users WHERE id = ?');

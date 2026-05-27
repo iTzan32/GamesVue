@@ -1,4 +1,5 @@
 <script setup>
+// Datos y acciones del carrito.
 const {
   cart,
   cartTotal,
@@ -8,13 +9,16 @@ const {
   checkoutCart
 } = useGameStore()
 
+// Estados de la compra.
 const loading = ref(false)
 const error = ref('')
 
 onMounted(async () => {
+  // Recupera carrito y usuario al entrar.
   await loadData()
 })
 
+// Envia el carrito a la API para finalizar compra.
 const checkout = async () => {
   error.value = ''
   loading.value = true
@@ -30,7 +34,9 @@ const checkout = async () => {
 </script>
 
 <template>
+  <!-- Pagina del carrito. -->
   <section class="grid gap-6">
+    <!-- Cabecera con enlace para seguir comprando. -->
     <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <h1 class="text-3xl font-bold">carrito</h1>
@@ -43,6 +49,7 @@ const checkout = async () => {
       </UButton>
     </div>
 
+    <!-- Avisos de carrito vacio o error de compra. -->
     <UAlert
       v-if="cart.length === 0"
       variant="soft"
@@ -52,6 +59,7 @@ const checkout = async () => {
     <UAlert v-if="error" color="red" variant="soft" :description="error" />
 
     <div v-else class="grid gap-4">
+      <!-- Productos anadidos al carrito. -->
       <CartItem
         v-for="item in cart"
         :key="item.id"
@@ -59,6 +67,7 @@ const checkout = async () => {
         @remove="removeFromCart"
       />
 
+      <!-- Resumen total y pago. -->
       <UCard>
         <div class="flex items-center justify-between">
           <p class="text-lg font-semibold">total</p>

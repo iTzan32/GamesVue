@@ -1,6 +1,8 @@
 <script setup>
+// Perfil del usuario actual y actualizacion.
 const { currentUser, loadData, logout, updateUser } = useGameStore()
 
+// Formulario editable del perfil.
 const form = reactive({
   id: '',
   name: '',
@@ -10,10 +12,12 @@ const form = reactive({
   password: ''
 })
 
+// Estados visuales al guardar.
 const loading = ref(false)
 const message = ref('')
 const error = ref('')
 
+// Copia el usuario actual al formulario.
 watch(
   currentUser,
   (user) => {
@@ -32,9 +36,11 @@ watch(
 )
 
 onMounted(async () => {
+  // Recupera usuario guardado al cargar perfil.
   await loadData()
 })
 
+// Guarda cambios personales en la API.
 const saveProfile = async () => {
   message.value = ''
   error.value = ''
@@ -51,6 +57,7 @@ const saveProfile = async () => {
   }
 }
 
+// Cierra sesion desde el perfil.
 const closeSession = async () => {
   logout()
   await navigateTo('/')
@@ -58,6 +65,7 @@ const closeSession = async () => {
 </script>
 
 <template>
+  <!-- Pagina de perfil del usuario. -->
   <section class="mx-auto max-w-2xl">
     <UCard>
       <template #header>
@@ -70,6 +78,7 @@ const closeSession = async () => {
       </template>
 
       <form v-if="currentUser" class="grid gap-4" @submit.prevent="saveProfile">
+        <!-- Datos que puede editar el usuario. -->
         <UFormGroup label="nombre">
           <UInput v-model="form.name" required />
         </UFormGroup>
@@ -93,6 +102,7 @@ const closeSession = async () => {
         <UAlert v-if="message" color="green" variant="soft" :description="message" />
         <UAlert v-if="error" color="red" variant="soft" :description="error" />
 
+        <!-- Acciones del perfil. -->
         <div class="flex flex-wrap gap-3">
           <UButton type="submit" :loading="loading">
             guardar cambios
@@ -106,6 +116,7 @@ const closeSession = async () => {
         </div>
       </form>
 
+      <!-- Bloque mostrado si no hay sesion. -->
       <div v-else class="grid gap-4">
         <UAlert
           color="yellow"

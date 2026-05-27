@@ -1,5 +1,6 @@
 <?php
 
+// Convierte datos de MySQL al formato que usa Vue.
 function cleanGame(array $game): array
 {
     return [
@@ -14,6 +15,7 @@ function cleanGame(array $game): array
     ];
 }
 
+// Busca un juego por id.
 function getGame(PDO $db, int $id): ?array
 {
     $stmt = $db->prepare('SELECT * FROM games WHERE id = ?');
@@ -22,6 +24,7 @@ function getGame(PDO $db, int $id): ?array
     return $game ? cleanGame($game) : null;
 }
 
+// Valida y prepara datos de un juego recibido.
 function gameData(array $data): array
 {
     $game = [
@@ -34,6 +37,7 @@ function gameData(array $data): array
         'image' => cleanText($data, 'image') ?: '🎮',
     ];
 
+    // Campos obligatorios antes de guardar.
     if (
         $game['title'] === ''
         || $game['description'] === ''
@@ -48,13 +52,16 @@ function gameData(array $data): array
     return $game;
 }
 
+// Controlador de /games.
 function handleJuegos(PDO $db, string $method, array $parts): void
 {
+    // Listar juegos.
     if ($method === 'GET') {
         $stmt = $db->query('SELECT * FROM games ORDER BY id');
         sendJson(['games' => array_map('cleanGame', $stmt->fetchAll())]);
     }
 
+    // Crear juego.
     if ($method === 'POST') {
         $game = gameData(readJson());
         $stmt = $db->prepare(
@@ -74,6 +81,7 @@ function handleJuegos(PDO $db, string $method, array $parts): void
         sendJson(['game' => getGame($db, (int) $db->lastInsertId())], 201);
     }
 
+    // Actualizar juego existente.
     if ($method === 'PUT') {
         $id = idFromRoute($parts);
         $game = gameData(readJson());
@@ -102,6 +110,7 @@ function handleJuegos(PDO $db, string $method, array $parts): void
         sendJson(['game' => $updatedGame]);
     }
 
+    // Borrar juego.
     if ($method === 'DELETE') {
         $id = idFromRoute($parts);
         $stmt = $db->prepare('DELETE FROM games WHERE id = ?');

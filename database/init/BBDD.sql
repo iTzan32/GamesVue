@@ -1,11 +1,15 @@
+-- Crea la base de datos principal si no existe.
 CREATE DATABASE IF NOT EXISTS gamesvue
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 
+-- Usa la base de datos del proyecto.
 USE gamesvue;
 
+-- Permite guardar acentos y emojis.
 SET NAMES utf8mb4;
 
+-- Usuarios de la tienda y administradores.
 CREATE TABLE IF NOT EXISTS users (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
@@ -19,6 +23,7 @@ CREATE TABLE IF NOT EXISTS users (
   UNIQUE KEY users_email_unique (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Catalogo de videojuegos.
 CREATE TABLE IF NOT EXISTS games (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(150) NOT NULL,
@@ -36,6 +41,7 @@ CREATE TABLE IF NOT EXISTS games (
   KEY games_platform_index (platform)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Compras finalizadas con detalle en JSON.
 CREATE TABLE IF NOT EXISTS historial_compras (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id INT UNSIGNED NULL,
@@ -51,6 +57,7 @@ CREATE TABLE IF NOT EXISTS historial_compras (
     ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Usuarios de prueba para la demo.
 INSERT INTO users (id, name, email, direccion, telefono, password_hash, is_admin)
 VALUES
   (1, 'Izan', 'izanbelcam@icloud.com', '', '', '$2y$10$unKLuAnMogrFLVt.72bySONlDW7XyMS1sucCHWcde1f3cxbWFxmFe', 1),
@@ -63,6 +70,7 @@ ON DUPLICATE KEY UPDATE
   password_hash = VALUES(password_hash),
   is_admin = VALUES(is_admin);
 
+-- Juegos iniciales del catalogo.
 INSERT INTO games (id, title, description, genre, platform, price, stock, image)
 VALUES
   (1, 'The Legend of Zelda', 'Aventura clasica de exploracion y fantasia', 'Aventura', 'Nintendo Switch', 59.99, 8, '🗡️'),

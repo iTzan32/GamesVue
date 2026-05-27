@@ -1,4 +1,5 @@
 <script setup>
+// Usuario seleccionado desde el panel admin.
 const props = defineProps({
   user: {
     type: Object,
@@ -6,8 +7,10 @@ const props = defineProps({
   }
 })
 
+// Eventos para guardar o cancelar edicion.
 const emit = defineEmits(['save', 'cancel'])
 
+// Formulario reactivo de usuario.
 const form = reactive({
   id: '',
   name: '',
@@ -18,6 +21,7 @@ const form = reactive({
   is_admin: 0
 })
 
+// Copia el usuario elegido y deja password vacio.
 watch(
   () => props.user,
   (user) => {
@@ -28,18 +32,21 @@ watch(
   { immediate: true }
 )
 
+// Envia datos normalizando is_admin a numero.
 const save = () => {
   emit('save', { ...form, is_admin: Number(form.is_admin) })
 }
 </script>
 
 <template>
+  <!-- Formulario para editar usuarios. -->
   <UCard>
     <template #header>
       <h2 class="text-lg font-semibold">editar usuario</h2>
     </template>
 
     <form v-if="user" class="grid gap-4" @submit.prevent="save">
+      <!-- Datos personales editables. -->
       <UFormGroup label="nombre">
         <UInput v-model="form.name" required />
       </UFormGroup>
@@ -60,6 +67,7 @@ const save = () => {
         <UInput v-model="form.password" type="password" placeholder="dejar vacio para no cambiarlo" />
       </UFormGroup>
 
+      <!-- Rol del usuario en la aplicacion. -->
       <UFormGroup label="tipo">
         <USelect
           v-model="form.is_admin"
@@ -70,6 +78,7 @@ const save = () => {
         />
       </UFormGroup>
 
+      <!-- Guardar o cancelar cambios. -->
       <div class="flex gap-2">
         <UButton type="submit">
           guardar
@@ -80,6 +89,7 @@ const save = () => {
       </div>
     </form>
 
+    <!-- Mensaje cuando aun no hay usuario seleccionado. -->
     <p v-else class="text-sm text-gray-300">
       selecciona un usuario para editarlo
     </p>

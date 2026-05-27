@@ -1,4 +1,5 @@
 <script setup>
+// Si llega un juego, el formulario edita; si no, crea.
 const props = defineProps({
   game: {
     type: Object,
@@ -6,8 +7,10 @@ const props = defineProps({
   }
 })
 
+// Eventos que escucha el panel admin.
 const emit = defineEmits(['save', 'cancel'])
 
+// Valores iniciales del formulario.
 const emptyForm = () => ({
   title: '',
   description: '',
@@ -18,8 +21,10 @@ const emptyForm = () => ({
   image: '🎮'
 })
 
+// Formulario reactivo conectado a los inputs.
 const form = reactive(emptyForm())
 
+// Rellena el formulario al elegir un juego.
 watch(
   () => props.game,
   (game) => {
@@ -28,6 +33,7 @@ watch(
   { immediate: true }
 )
 
+// Envia una copia limpia al componente padre.
 const save = () => {
   emit('save', { ...form })
   Object.assign(form, emptyForm())
@@ -35,6 +41,7 @@ const save = () => {
 </script>
 
 <template>
+  <!-- Formulario de crear o editar juegos. -->
   <UCard>
     <template #header>
       <h2 class="text-lg font-semibold">
@@ -43,6 +50,7 @@ const save = () => {
     </template>
 
     <form class="grid gap-4" @submit.prevent="save">
+      <!-- Datos principales del juego. -->
       <UFormGroup label="titulo">
         <UInput v-model="form.title" required />
       </UFormGroup>
@@ -51,6 +59,7 @@ const save = () => {
         <UTextarea v-model="form.description" required />
       </UFormGroup>
 
+      <!-- Clasificacion del juego. -->
       <div class="grid gap-4 sm:grid-cols-2">
         <UFormGroup label="genero">
           <UInput v-model="form.genre" required />
@@ -61,6 +70,7 @@ const save = () => {
         </UFormGroup>
       </div>
 
+      <!-- Precio, stock e icono/imagen. -->
       <div class="grid gap-4 sm:grid-cols-3">
         <UFormGroup label="precio">
           <UInput v-model.number="form.price" type="number" min="0" step="0.01" required />
@@ -75,6 +85,7 @@ const save = () => {
         </UFormGroup>
       </div>
 
+      <!-- Acciones del formulario. -->
       <div class="flex gap-2">
         <UButton type="submit">
           guardar

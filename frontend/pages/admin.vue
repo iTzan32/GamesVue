@@ -1,4 +1,5 @@
 <script setup>
+// Store con datos y operaciones de administracion.
 const {
   games,
   users,
@@ -12,15 +13,19 @@ const {
   deleteUser
 } = useGameStore()
 
+// Elementos seleccionados para editar.
 const selectedGame = ref(null)
 const selectedUser = ref(null)
+// Evita mostrar errores antes de cargar datos.
 const ready = ref(false)
 
 onMounted(async () => {
+  // Carga juegos, usuario actual y usuarios si es admin.
   await loadData()
   ready.value = true
 })
 
+// Crea o actualiza juegos segun haya seleccion.
 const saveGame = async (game) => {
   if (selectedGame.value) {
     await updateGame(game)
@@ -31,6 +36,7 @@ const saveGame = async (game) => {
   selectedGame.value = null
 }
 
+// Guarda cambios del usuario seleccionado.
 const saveUser = async (user) => {
   await updateUser(user)
   selectedUser.value = null
@@ -38,6 +44,7 @@ const saveUser = async (user) => {
 </script>
 
 <template>
+  <!-- Panel privado para administradores. -->
   <section class="grid gap-6">
     <div>
       <h1 class="text-3xl font-bold">panel admin</h1>
@@ -46,6 +53,7 @@ const saveUser = async (user) => {
       </p>
     </div>
 
+    <!-- Estados de carga y permisos. -->
     <UAlert
       v-if="!ready"
       variant="soft"
@@ -69,6 +77,7 @@ const saveUser = async (user) => {
     />
 
     <div v-else class="grid gap-8">
+      <!-- Gestion de juegos. -->
       <section class="grid gap-4">
         <GameForm
           :game="selectedGame"
@@ -78,6 +87,7 @@ const saveUser = async (user) => {
 
         <div class="grid gap-3">
           <h2 class="text-xl font-semibold">juegos</h2>
+          <!-- Lista editable del catalogo. -->
           <UCard v-for="game in games" :key="game.id">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
@@ -99,6 +109,7 @@ const saveUser = async (user) => {
         </div>
       </section>
 
+      <!-- Gestion de usuarios. -->
       <section class="grid gap-4">
         <UserForm
           :user="selectedUser"
@@ -108,6 +119,7 @@ const saveUser = async (user) => {
 
         <div class="grid gap-3">
           <h2 class="text-xl font-semibold">usuarios</h2>
+          <!-- Lista editable de usuarios. -->
           <UCard v-for="user in users" :key="user.id">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>

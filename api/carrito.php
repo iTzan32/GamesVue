@@ -1,5 +1,6 @@
 <?php
 
+// Cancela la compra si ocurre un error.
 function checkoutError(PDO $db, string $message, int $status = 400): void
 {
     if ($db->inTransaction()) {
@@ -9,12 +10,15 @@ function checkoutError(PDO $db, string $message, int $status = 400): void
     sendJson(['error' => $message], $status);
 }
 
+// Controlador de finalizacion de compra.
 function handleCarrito(PDO $db, string $method): void
 {
+    // Checkout solo acepta POST.
     if ($method !== 'POST') {
         sendJson(['error' => 'metodo no permitido'], 405);
     }
 
+    // Datos enviados desde el carrito de Vue.
     $data = readJson();
     $userId = (int) ($data['user_id'] ?? 0);
     $items = $data['items'] ?? [];
@@ -27,6 +31,7 @@ function handleCarrito(PDO $db, string $method): void
         sendJson(['error' => 'el carrito esta vacio'], 422);
     }
 
+    // Comprueba que el usuario existe.
     $stmt = $db->prepare('SELECT id, name, email FROM users WHERE id = ?');
     $stmt->execute([$userId]);
     $user = $stmt->fetch();
@@ -35,11 +40,13 @@ function handleCarrito(PDO $db, string $method): void
         sendJson(['error' => 'usuario no encontrado'], 404);
     }
 
+    // Transaccion para mantener stock e historial coherentes.
     $db->beginTransaction();
 
     $total = 0;
     $historyItems = [];
 
+    // Valida cada linea del carrito.
     foreach ($items as $item) {
         $gameId = (int) ($item['id'] ?? 0);
         $quantity = (int) ($item['quantity'] ?? 0);
@@ -48,6 +55,7 @@ function handleCarrito(PDO $db, string $method): void
             checkoutError($db, 'hay un producto no valido', 422);
         }
 
+        // FOR UPDATE bloquea el juego mientras se compra.
         $stmt = $db->prepare('SELECT * FROM games WHERE id = ? FOR UPDATE');
         $stmt->execute([$gameId]);
         $game = $stmt->fetch();
@@ -73,11 +81,13 @@ function handleCarrito(PDO $db, string $method): void
         ];
     }
 
+    // Descuenta stock despues de validar todo.
     foreach ($historyItems as $item) {
         $stmt = $db->prepare('UPDATE games SET stock = stock - ? WHERE id = ?');
         $stmt->execute([$item['quantity'], $item['game_id']]);
     }
 
+    // Guarda la compra con detalle en JSON.
     $stmt = $db->prepare(
         'INSERT INTO historial_compras (user_id, user_name, user_email, total_amount, items)
          VALUES (?, ?, ?, ?, ?)'
@@ -93,6 +103,7 @@ function handleCarrito(PDO $db, string $method): void
 
     $db->commit();
 
+    // Devuelve id y total de la compra creada.
     sendJson([
         'compra' => [
             'id' => $compraId,

@@ -1,5 +1,6 @@
 <?php
 
+// Oculta password_hash y normaliza el usuario para Vue.
 function cleanUser(array $user): array
 {
     return [
@@ -12,8 +13,10 @@ function cleanUser(array $user): array
     ];
 }
 
+// Controlador de login y registro.
 function handleUsuarios(PDO $db, string $method, string $resource): void
 {
+    // Login con email y password.
     if ($resource === 'login' && $method === 'POST') {
         $data = readJson();
         $email = cleanText($data, 'email');
@@ -30,6 +33,7 @@ function handleUsuarios(PDO $db, string $method, string $resource): void
         sendJson(['user' => cleanUser($user)]);
     }
 
+    // Alta de usuario normal.
     if ($resource === 'register' && $method === 'POST') {
         $data = readJson();
         $name = cleanText($data, 'name');
@@ -40,6 +44,7 @@ function handleUsuarios(PDO $db, string $method, string $resource): void
             sendJson(['error' => 'faltan datos obligatorios'], 422);
         }
 
+        // La contrasena se guarda hasheada, no en texto plano.
         $stmt = $db->prepare(
             'INSERT INTO users (name, email, password_hash, is_admin) VALUES (?, ?, ?, 0)'
         );

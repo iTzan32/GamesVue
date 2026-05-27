@@ -1,23 +1,30 @@
+// Claves usadas para guardar datos en localStorage.
 const keys = {
   cart: 'gamesvue_cart',
   currentUser: 'gamesvue_current_user'
 }
 
+// Crea una copia simple para evitar modificar el original.
 const copy = (value) => JSON.parse(JSON.stringify(value))
 
+// Comprueba si el usuario tiene permisos de administrador.
 const hasAdminRole = (user) => Number(user?.is_admin) === 1
 
+// Store compartido por todas las paginas y componentes.
 export const useGameStore = () => {
   const config = useRuntimeConfig()
+  // Estados globales reactivos de Nuxt.
   const games = useState('gamesvue_games', () => [])
   const users = useState('gamesvue_users', () => [])
   const cart = useState('gamesvue_cart', () => [])
   const currentUser = useState('gamesvue_current_user', () => null)
 
+  // Helper para llamar a la API PHP.
   const api = async (path, options = {}) => (
     await $fetch(`${config.public.apiBase}${path}`, options)
   )
 
+  // Lee datos locales solo en el navegador.
   const read = (key, defaultValue) => {
     if (!process.client) {
       return copy(defaultValue)
@@ -27,22 +34,26 @@ export const useGameStore = () => {
     return savedValue ? JSON.parse(savedValue) : copy(defaultValue)
   }
 
+  // Guarda datos locales solo en el navegador.
   const write = (key, value) => {
     if (process.client) {
       localStorage.setItem(key, JSON.stringify(value))
     }
   }
 
+  // Trae el catalogo desde MySQL mediante la API.
   const loadGames = async () => {
     const response = await api('/games')
     games.value = response.games || []
   }
 
+  // Trae usuarios solo para la parte de administracion.
   const loadUsers = async () => {
     const response = await api('/users')
     users.value = response.users || []
   }
 
+  // Carga usuario, carrito y datos principales.
   const loadData = async () => {
     cart.value = read(keys.cart, [])
     currentUser.value = read(keys.currentUser, null)
@@ -54,8 +65,10 @@ export const useGameStore = () => {
     }
   }
 
+  // Sincroniza el carrito con localStorage.
   const saveCart = () => write(keys.cart, cart.value)
 
+  // Inicia sesion contra la API.
   const login = async (email, password) => {
     try {
       const response = await api('/login', {
@@ -76,6 +89,7 @@ export const useGameStore = () => {
     }
   }
 
+  // Cierra sesion y limpia datos locales.
   const logout = () => {
     currentUser.value = null
     users.value = []
@@ -87,6 +101,7 @@ export const useGameStore = () => {
     }
   }
 
+  // Crea un usuario normal desde registro.
   const registerUser = async (userData) => {
     try {
       const response = await api('/register', {
@@ -105,6 +120,7 @@ export const useGameStore = () => {
     }
   }
 
+  // Anade un juego al carrito si hay stock.
   const addToCart = (game) => {
     if (game.stock <= 0) {
       return
@@ -129,11 +145,13 @@ export const useGameStore = () => {
     saveCart()
   }
 
+  // Elimina una linea completa del carrito.
   const removeFromCart = (gameId) => {
     cart.value = cart.value.filter((item) => item.id !== gameId)
     saveCart()
   }
 
+  // Crea un juego desde el panel admin.
   const createGame = async (gameData) => {
     const response = await api('/games', {
       method: 'POST',
@@ -145,6 +163,7 @@ export const useGameStore = () => {
     }
   }
 
+  // Actualiza un juego y tambien refresca el carrito.
   const updateGame = async (gameData) => {
     const response = await api(`/games/${gameData.id}`, {
       method: 'PUT',
@@ -165,6 +184,7 @@ export const useGameStore = () => {
     saveCart()
   }
 
+  // Borra un juego del catalogo y del carrito.
   const deleteGame = async (gameId) => {
     await api(`/games/${gameId}`, {
       method: 'DELETE'
@@ -175,6 +195,7 @@ export const useGameStore = () => {
     saveCart()
   }
 
+  // Actualiza datos de un usuario.
   const updateUser = async (userData) => {
     const response = await api(`/users/${userData.id}`, {
       method: 'PUT',
@@ -193,6 +214,7 @@ export const useGameStore = () => {
     }
   }
 
+  // Borra usuarios desde administracion.
   const deleteUser = async (userId) => {
     await api(`/users/${userId}`, {
       method: 'DELETE'
@@ -205,6 +227,7 @@ export const useGameStore = () => {
     }
   }
 
+  // Finaliza compra, guarda historial y descuenta stock.
   const checkoutCart = async () => {
     if (!currentUser.value) {
       throw new Error('inicia sesion para finalizar la compra')
@@ -228,12 +251,15 @@ export const useGameStore = () => {
     return response.compra
   }
 
+  // Total calculado automaticamente desde el carrito.
   const cartTotal = computed(() => (
     cart.value.reduce((total, item) => total + item.price * item.quantity, 0)
   ))
 
+  // Permiso reactivo para mostrar u ocultar admin.
   const isAdmin = computed(() => hasAdminRole(currentUser.value))
 
+  // Todo lo que pueden usar paginas y componentes.
   return {
     games,
     users,

@@ -1,17 +1,22 @@
 <script setup>
+// Acciones de sesion desde el store.
 const { login, loadData } = useGameStore()
 
+// Campos del formulario de login.
 const form = reactive({
   email: '',
   password: ''
 })
 
+// Mensaje si la API rechaza el acceso.
 const error = ref('')
 
 onMounted(async () => {
+  // Recupera datos guardados al abrir login.
   await loadData()
 })
 
+// Comprueba credenciales y navega al catalogo.
 const submit = async () => {
   error.value = ''
 
@@ -27,6 +32,7 @@ const submit = async () => {
 </script>
 
 <template>
+  <!-- Pantalla de inicio de sesion. -->
   <section class="mx-auto max-w-md">
     <UCard>
       <template #header>
@@ -39,6 +45,7 @@ const submit = async () => {
       </template>
 
       <form class="grid gap-4" @submit.prevent="submit">
+        <!-- Credenciales enviadas a PHP. -->
         <UFormGroup label="email">
           <UInput v-model="form.email" type="email" placeholder="izanbelcam@icloud.com" required />
         </UFormGroup>
@@ -49,6 +56,7 @@ const submit = async () => {
 
         <UAlert v-if="error" color="red" variant="soft" :description="error" />
 
+        <!-- Submit del formulario. -->
         <UButton type="submit" block>
           entrar
         </UButton>
