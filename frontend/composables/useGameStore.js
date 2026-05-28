@@ -29,7 +29,6 @@ export const useGameStore = () => {
     if (!process.client) {
       return copy(defaultValue)
     }
-
     const savedValue = localStorage.getItem(key)
     return savedValue ? JSON.parse(savedValue) : copy(defaultValue)
   }
@@ -57,9 +56,7 @@ export const useGameStore = () => {
   const loadData = async () => {
     cart.value = read(keys.cart, [])
     currentUser.value = read(keys.currentUser, null)
-
     await loadGames()
-
     if (hasAdminRole(currentUser.value)) {
       await loadUsers()
     }
@@ -75,14 +72,11 @@ export const useGameStore = () => {
         method: 'POST',
         body: { email, password }
       })
-
       currentUser.value = response.user
       write(keys.currentUser, currentUser.value)
-
       if (hasAdminRole(currentUser.value)) {
         await loadUsers()
       }
-
       return true
     } catch {
       return false
@@ -94,7 +88,6 @@ export const useGameStore = () => {
     currentUser.value = null
     users.value = []
     cart.value = []
-
     if (process.client) {
       localStorage.removeItem(keys.currentUser)
       localStorage.removeItem(keys.cart)
@@ -108,12 +101,10 @@ export const useGameStore = () => {
         method: 'POST',
         body: userData
       })
-
       if (response.user) {
         currentUser.value = response.user
         write(keys.currentUser, currentUser.value)
       }
-
       return true
     } catch {
       return false
@@ -125,9 +116,7 @@ export const useGameStore = () => {
     if (game.stock <= 0) {
       return
     }
-
     const item = cart.value.find((cartItem) => cartItem.id === game.id)
-
     if (item) {
       if (item.quantity < game.stock) {
         item.quantity++
@@ -141,7 +130,6 @@ export const useGameStore = () => {
         quantity: 1
       })
     }
-
     saveCart()
   }
 
@@ -157,7 +145,6 @@ export const useGameStore = () => {
       method: 'POST',
       body: gameData
     })
-
     if (response.game) {
       games.value.push(response.game)
     }
@@ -169,13 +156,10 @@ export const useGameStore = () => {
       method: 'PUT',
       body: gameData
     })
-
     const index = games.value.findIndex((game) => game.id === gameData.id)
-
     if (index !== -1 && response.game) {
       games.value[index] = response.game
     }
-
     cart.value = cart.value.map((item) => (
       item.id === gameData.id && response.game
         ? { ...item, title: response.game.title, price: response.game.price, image: response.game.image }
@@ -189,7 +173,6 @@ export const useGameStore = () => {
     await api(`/games/${gameId}`, {
       method: 'DELETE'
     })
-
     games.value = games.value.filter((game) => game.id !== gameId)
     cart.value = cart.value.filter((item) => item.id !== gameId)
     saveCart()
@@ -201,13 +184,10 @@ export const useGameStore = () => {
       method: 'PUT',
       body: userData
     })
-
     const index = users.value.findIndex((user) => user.id === userData.id)
-
     if (index !== -1 && response.user) {
       users.value[index] = response.user
     }
-
     if (currentUser.value?.id === userData.id && response.user) {
       currentUser.value = response.user
       write(keys.currentUser, currentUser.value)
@@ -219,9 +199,7 @@ export const useGameStore = () => {
     await api(`/users/${userId}`, {
       method: 'DELETE'
     })
-
     users.value = users.value.filter((user) => user.id !== userId)
-
     if (currentUser.value?.id === userId) {
       logout()
     }
@@ -232,7 +210,6 @@ export const useGameStore = () => {
     if (!currentUser.value) {
       throw new Error('inicia sesion para finalizar la compra')
     }
-
     const response = await api('/checkout', {
       method: 'POST',
       body: {
@@ -243,11 +220,9 @@ export const useGameStore = () => {
         }))
       }
     })
-
     cart.value = []
     saveCart()
     await loadGames()
-
     return response.compra
   }
 

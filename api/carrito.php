@@ -6,7 +6,6 @@ function checkoutError(PDO $db, string $message, int $status = 400): void
     if ($db->inTransaction()) {
         $db->rollBack();
     }
-
     sendJson(['error' => $message], $status);
 }
 

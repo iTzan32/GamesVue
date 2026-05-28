@@ -27,11 +27,9 @@ function sendJson(array $data, int $status = 200): void
 function readJson(): array
 {
     $body = file_get_contents('php://input');
-
     if ($body === false || trim($body) === '') {
         return [];
     }
-
     $data = json_decode($body, true);
     return is_array($data) ? $data : [];
 }
@@ -60,11 +58,9 @@ function cleanText(array $data, string $key): string
 function idFromRoute(array $parts): int
 {
     $id = (int) ($parts[1] ?? 0);
-
     if ($id <= 0) {
         sendJson(['error' => 'id no valido'], 400);
     }
-
     return $id;
 }
 

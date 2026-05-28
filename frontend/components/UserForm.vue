@@ -80,9 +80,7 @@ const save = () => {
 
       <!-- Guardar o cancelar cambios. -->
       <div class="flex gap-2">
-        <UButton type="submit">
-          guardar
-        </UButton>
+        <UButton type="submit">guardar</UButton>
         <UButton type="button" color="gray" variant="soft" @click="$emit('cancel')">
           cancelar
         </UButton>

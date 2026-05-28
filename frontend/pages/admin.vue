@@ -32,7 +32,6 @@ const saveGame = async (game) => {
   } else {
     await createGame(game)
   }
-
   selectedGame.value = null
 }
 

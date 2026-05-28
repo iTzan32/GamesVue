@@ -10,11 +10,11 @@ En Nuxt, cada archivo dentro de `pages` se convierte automaticamente en una ruta
 
 Para los datos uso un composable llamado `useGameStore`. Es como el punto central del frontend: guarda los juegos, usuarios, carrito y usuario actual. Desde ahi llamo a la API PHP con `$fetch`, guardo carrito y sesion en `localStorage`, y mantengo sincronizadas las paginas.
 
-La API empieza en `api/index.php`, que funciona como un router sencillo. Segun la ruta, llama a los archivos de usuarios, juegos, administracion o carrito. La conexion a MySQL se hace con PDO, usando consultas preparadas para trabajar de forma mas segura con la base de datos.
+La API empieza en `api/index.php`, que funciona como un router sencillo. Segun la ruta, llama a los archivos de usuarios, juegos, admin o carrito. La conexion a MySQL se hace con PDO, usando consultas preparadas para trabajar de forma mas segura con la base de datos.
 
-La parte de compra funciona asi: el usuario anade juegos al carrito, el carrito se mantiene en el navegador, y cuando finaliza compra se envia a la API. La API comprueba usuario, stock y productos, descuenta el stock y guarda la compra en `historial_compras`.
+La parte de compra funciona asi: el usuario añade juegos al carrito, el carrito se mantiene en el navegador, y cuando finaliza compra se envia a la API. La API comprueba usuario, stock y productos, descuenta el stock y guarda la compra en `historial_compras`.
 
-El panel admin esta protegido a nivel visual por `is_admin`. Si el usuario tiene `is_admin = 1`, puede crear, editar y borrar juegos, y tambien gestionar usuarios. Si no es admin, la pagina muestra un aviso de acceso no disponible.
+El panel admin esta protegido a nivel visual por `is_admin`. Si el usuario tiene `is_admin = 1`, puede crear, editar y borrar juegos, y tambien gestionar usuarios. Si no es admin, la pagina muestra un aviso de acceso no disponible. 
 
 ## Como funciona el CSS en Nuxt en este proyecto
 

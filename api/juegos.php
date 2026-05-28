@@ -58,7 +58,8 @@ function handleJuegos(PDO $db, string $method, array $parts): void
     // Listar juegos.
     if ($method === 'GET') {
         $stmt = $db->query('SELECT * FROM games ORDER BY id');
-        sendJson(['games' => array_map('cleanGame', $stmt->fetchAll())]);
+        $games = $stmt->fetchAll();
+        sendJson(['games' => array_map('cleanGame', $games)]);
     }
 
     // Crear juego.
@@ -102,11 +103,9 @@ function handleJuegos(PDO $db, string $method, array $parts): void
         ]);
 
         $updatedGame = getGame($db, $id);
-
         if (!$updatedGame) {
             sendJson(['error' => 'juego no encontrado'], 404);
         }
-
         sendJson(['game' => $updatedGame]);
     }
 

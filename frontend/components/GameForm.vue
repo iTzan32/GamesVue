@@ -64,7 +64,6 @@ const save = () => {
         <UFormGroup label="genero">
           <UInput v-model="form.genre" required />
         </UFormGroup>
-
         <UFormGroup label="plataforma">
           <UInput v-model="form.platform" required />
         </UFormGroup>
@@ -75,11 +74,9 @@ const save = () => {
         <UFormGroup label="precio">
           <UInput v-model.number="form.price" type="number" min="0" step="0.01" required />
         </UFormGroup>
-
         <UFormGroup label="stock">
           <UInput v-model.number="form.stock" type="number" min="0" required />
         </UFormGroup>
-
         <UFormGroup label="imagen">
           <UInput v-model="form.image" required />
         </UFormGroup>
@@ -87,9 +84,7 @@ const save = () => {
 
       <!-- Acciones del formulario. -->
       <div class="flex gap-2">
-        <UButton type="submit">
-          guardar
-        </UButton>
+        <UButton type="submit">guardar</UButton>
         <UButton v-if="game" type="button" color="gray" variant="soft" @click="$emit('cancel')">
           cancelar
         </UButton>
